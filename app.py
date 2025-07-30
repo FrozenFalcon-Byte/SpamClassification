@@ -22,6 +22,14 @@ def predict_api():
     return jsonify({'prediction': prediction.tolist()})
 
 
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.form['email']
+    final_input = vectorizer.transform([data])
+    print(final_input)
+    output = spam_classifier.predict(final_input).tolist()
+    return render_template('index.html', prediction_text='The email is {}'.format('Spam' if output[0] == 1 else 'Not Spam'))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
